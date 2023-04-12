@@ -21,7 +21,8 @@ def createPost():
             "images":[]
         }
         for image in images:
-            filename = str(time.time())+"."+image.filename.split(".")[1]
+            filename = str(random.randint(1,32423532345))+"."+image.filename.split(".")[1]
+            filename = image.filename.replace(" ","")
             data["images"].append(filename)
             image.save(os.path.join('static',filename))
             
@@ -37,7 +38,7 @@ def createPost():
         except:
             reader = {}
 
-        reader[postId] = reader
+        reader[postId] = data
 
         open("postInfo.json","w").write(json.dumps(reader,indent=4))
 
