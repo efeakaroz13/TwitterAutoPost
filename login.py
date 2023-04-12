@@ -4,6 +4,8 @@ import json
 from bs4 import BeautifulSoup
 import time
 from selenium.webdriver.common.by import By
+from colorama import Fore
+import pickle
 
 accounts = open("accounts.txt","r").readlines()
 """
@@ -40,18 +42,46 @@ class Faraday:
         self.driver.execute_script(sc)
 
 
-    def login(self,username,password,email,phonenumber):
+    def login(self,username,password,email,phonenumber,sname):
         
+        self.driver.get("https://twitter.com")
+        self.driver.add_cookie({"name":"lang","value":"en"})
+        time.sleep(10)
+
+
         self.driver.get("https://twitter.com/i/flow/login")
-        
-        script = """
-        var username = '"""+username+"""';
-        var email    = '"""+email+"""';
-        var password = '"""+password+"""';
-        var phone = '"""+phonenumber+"""';
+        time.sleep(10)
+        self.driver.find_element(By.NAME,"text").send_keys(username)
+        self.checkButton("Next")
+        time.sleep(5)
 
-        document.getElementsByName('text')[0].value = username;
+        self.driver.find_element(By.NAME,'password').send_keys(password)
+
+        time.sleep(5)
+        self.checkButton('Log')
+        #print('Logged in successfully')
+        time.sleep(5)
+        pickle.dump(driver.get_cookies(),open(f'{username}.pkl','wb'))
+        print(Fore.GREEN,f'SUCCESS | {username}.pkl')
+        dataRead = json.loads(open(f'{sname}.json','r').read())
+
+        data = {
+            'username':username,
+            'password':password,
+            'email':email,
+            'phonenumber':phonenumber,
+            'lastLogin':time.time(),
+            'timeLoggedIn':time.time()
+        }
+
+
+        dataRead[username] = data
+
+        open(f'{sname}.json','w').write(json.dumps(dataRead,indent=4))
 
 
 
-        """
+
+if __name__ == "__main__":
+    faraday = Faraday()
+    
