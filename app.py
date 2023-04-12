@@ -9,11 +9,17 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    try:
+        allPosts = json.loads(open("postInfo.json","r").read())
+    except Exception as e:
+
+        allPosts = None
+    return render_template('index.html',allPosts=allPosts)
 
 @app.route('/createPost',methods=['POST','GET'])
 def createPost():
     if request.method == 'GET':
+        
         return render_template('create.html')
     if request.method == "POST":
         images = request.files.getlist('images[]')
@@ -43,6 +49,16 @@ def createPost():
         open("postInfo.json","w").write(json.dumps(reader,indent=4))
 
         return redirect('/createPost')
+
+@app.route("/post/<pid>")
+def postSettings(pid):
+    try:
+        data= json.loads(open("postInfo.json","r").read())[pid]
+    except:
+        return "404"
+    title = data["title"]
+    images = data["images"]
+    return render_template("post.html",images=images,title=title)
 
 if __name__ == "__main__":
     app.run(debug=True,port=3000)

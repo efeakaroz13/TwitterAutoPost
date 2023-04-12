@@ -1,7 +1,6 @@
 import undetected_chromedriver as uc
 import requests
 import json 
-from bs4 import BeautifulSoup
 import time
 from selenium.webdriver.common.by import By
 from colorama import Fore
@@ -14,7 +13,7 @@ NOTE:Format: username:password:email:phonenumber
 
 class Faraday:
     def __init__(self):
-        self.driver = uc.Chrome()
+        a=1
 
     def checkButton(self,buttonName):
         sc = """
@@ -43,7 +42,7 @@ class Faraday:
 
 
     def login(self,username,password,email,phonenumber,sname):
-        
+        self.driver = uc.Chrome()
         self.driver.get("https://twitter.com")
         self.driver.add_cookie({"name":"lang","value":"en"})
         time.sleep(10)
@@ -81,6 +80,8 @@ class Faraday:
         dataRead[username] = data
 
         open(f'{sname}.json','w').write(json.dumps(dataRead,indent=4))
+        self.driver.quit()
+
 
 
 

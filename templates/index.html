@@ -1,2 +1,31 @@
-<p>Homepage</p>
-<a href="/createPost">Post oluştur</a>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faraday SE</title>
+    <link rel="shortcut icon" href="/static/faraday.png" type="image/png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-primary">
+        <a class="navbar-brand" href="" style="padding-left:20px">
+          
+          Faraday SE
+        </a>
+    </nav>
+    <div class="container">
+        <h1>Anasayfa</h1>
+        <ul class="list-group">
+            <li class="list-group-item" onclick="window.location.assign('/createPost')">Paylaşım oluştur +</li>
+            
+            {% if allPosts %}
+                {% for p in allPosts %}
+                    <li class="list-group-item" onclick="window.location.assign('/post/{{p}}')"><strong>{{allPosts[p]["title"]}}</strong> - {{allPosts[p]["images"] | length}} Resim iliştirildi</li>
+                {% endfor %}
+            {% endif %}
+          </ul>
+    </div>
+</body>
+</html>
