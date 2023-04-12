@@ -61,17 +61,20 @@ class Faraday:
         self.checkButton('Log')
         #print('Logged in successfully')
         time.sleep(5)
-        pickle.dump(driver.get_cookies(),open(f'{username}.pkl','wb'))
-        print(Fore.GREEN,f'SUCCESS | {username}.pkl')
-        dataRead = json.loads(open(f'{sname}.json','r').read())
-
+        pickle.dump(self.driver.get_cookies(),open(f'cookies/{username}.pkl','wb'))
+        print(Fore.GREEN,f'SUCCESS | {username}.pkl',Fore.RESET,time.ctime(time.time()))
+        try:
+            dataRead = json.loads(open(f'{sname}.json','r').read())
+        except:
+            dataRead = {}
         data = {
             'username':username,
             'password':password,
             'email':email,
             'phonenumber':phonenumber,
             'lastLogin':time.time(),
-            'timeLoggedIn':time.time()
+            'timeLoggedIn':time.time(),
+            'cookies':f'{username}.pkl'
         }
 
 
@@ -85,3 +88,14 @@ class Faraday:
 if __name__ == "__main__":
     faraday = Faraday()
     
+    for a in accounts:
+        allpieces = a.replace('\n','').split(':')
+        username = allpieces[0]
+        password = allpieces[1]
+        email = allpieces[2]
+        phone = allpieces[3]
+
+
+        faraday.login(username,password,email,phone,'s1')
+
+    print(Fore.BLUE,'Task Completed.')
