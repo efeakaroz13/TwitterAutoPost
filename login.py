@@ -42,21 +42,34 @@ class Faraday:
 
 
     def login(self,username,password,email,phonenumber,sname):
-        self.driver = uc.Chrome()
-        self.driver.get("https://twitter.com")
-        self.driver.add_cookie({"name":"lang","value":"en"})
+        try:
+            self.driver = uc.Chrome()
+
+            self.driver.get("https://twitter.com")
+            self.driver.add_cookie({"name":"lang","value":"en"})
+        except:
+            return {"SCC":False,"err":"Twitter.com'a bağlanılamadı"}
         time.sleep(10)
 
 
         self.driver.get("https://twitter.com/i/flow/login")
         time.sleep(10)
-        self.driver.find_element(By.NAME,"text").send_keys(username)
+        try:
+            self.driver.find_element(By.NAME,"text").send_keys(username)
+        except:
+            self.login(username,password,email,phonenumber,sname)
         self.checkButton("Next")
         time.sleep(5)
+        try:
+            self.driver.find_element(By.NAME,'password').send_keys(password)
+        except:
+            time.sleep(5)
+            try:
+                self.driver.find_element(By.NAME,'password').send_keys(password)
+            except:
+                return {"SCC":False,"err":"Şifre girişi penceresi bulunamadı - Chrome"}
 
-        self.driver.find_element(By.NAME,'password').send_keys(password)
-
-        time.sleep(5)
+        time.sleep(3)
         self.checkButton('Log')
         #print('Logged in successfully')
         time.sleep(5)
@@ -81,6 +94,7 @@ class Faraday:
 
         open(f'{sname}.json','w').write(json.dumps(dataRead,indent=4))
         self.driver.quit()
+        return {"SCC":True,"err":""}
 
 
 

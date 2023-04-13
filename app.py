@@ -3,7 +3,7 @@ import json
 import os
 import time
 import random 
-
+from login import Faraday
 app = Flask(__name__)
 
 
@@ -59,6 +59,26 @@ def postSettings(pid):
     title = data["title"]
     images = data["images"]
     return render_template("post.html",images=images,title=title)
+
+@app.route("/accountManager",methods=["POST","GET"])
+def accountManager():
+    try:
+        data= json.loads(open("s1.json","r").read())
+    except:
+        data = {}
+    return render_template("accounts.html",data=data)
+
+
+@app.route("/login_with_twitter")
+def login_with_twitter():
+    username = request.args.get("u")
+    password = request.args.get("p")
+    email = request.args.get("e")
+    phonenumber = request.args.get("ph")
+
+    faraday = Faraday()
+    out = faraday.login(username,password,email,phonenumber,"s1")
+    return out
 
 if __name__ == "__main__":
     app.run(debug=True,port=3000)
