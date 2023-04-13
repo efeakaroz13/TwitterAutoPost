@@ -7,6 +7,8 @@
     <title>Faraday SE</title>
     <link rel="shortcut icon" href="/static/faraday.png" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+
 </head>
 <body>
     <nav class="navbar navbar-dark bg-primary">
@@ -17,6 +19,7 @@
     </nav>
     <div class="container">
         <h1>Anasayfa</h1><br>
+        <p>Sıklık: <input type="number"  max="1200" id="frequency" value="{{f}}" >+10<button onclick="save_frequency()">Kaydet</button></p>
         <a href="/accountManager">Hesap Yöneticisi</a><br><br>
         <ul class="list-group">
             <li class="list-group-item" onclick="window.location.assign('/createPost')">Paylaşım oluştur +</li>
@@ -26,7 +29,17 @@
                     <li class="list-group-item" onclick="window.location.assign('/post/{{p}}')"><strong>{{allPosts[p]["title"]}}</strong> - {{allPosts[p]["images"] | length}} Resim iliştirildi</li>
                 {% endfor %}
             {% endif %}
-          </ul>
+          </ul><br><br>
+          <script>
+            function save_frequency(){
+                f = document.getElementById("frequency");
+                $.getJSON("/frequency?f="+f,function (data) {
+                    alert("Kaydedildi")
+                })
+            }
+          </script>
+        
+        
     </div>
 </body>
 </html>

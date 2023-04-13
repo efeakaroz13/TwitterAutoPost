@@ -13,7 +13,10 @@
     <button onclick="openEntryDump()">Çoklu ekle</button><br>
     <div id="entryDump" style="display:none" >
         <button onclick="openEntryDump()">X</button>
-        <center><textarea  id="dump" style="width:90%;height:80vh" placeholder="username:password:email:phonenumber"></textarea></center>
+        <center><textarea  id="dump" style="width:90%;height:80vh" placeholder="username:password:email:phonenumber"></textarea>
+            <br><button onclick="worker()">İşi başlat</button>
+        </center>
+        
     </div>
     <br>
     <input type="text" id="username" placeholder="Kullanıcı Adı"> <input style="margin-left:20px" type="text" id="password" placeholder="Şifre"><input style="margin-left:20px" type="text" id="email" placeholder="E-Posta adresi"> <input style="margin-left:20px" type="text" id="phone" placeholder="Telefon Numarası"><button style="margin-left:30px" onclick="await login_tw()">Giriş yap ve ekle</button><hr>
@@ -44,6 +47,24 @@
                  
             })
         }
+
+        function login_tw_worker(username,password,email,phonenumber){
+            
+            document.getElementById("accounts").innerHTML = document.getElementById("accounts").innerHTML + "<p id='"+username+"'>"+username+" <a style='margin-left:20px;'>"+password+"</a><a style='margin-left:20px;'>"+email+"</a><a style='margin-left:20px;'>"+phonenumber+"</a></p><hr>"
+            document.getElementById(username).style.color = "blue";
+            $.getJSON("/login_with_twitter?u="+username+"&p="+password+"&ph="+phonenumber+"&e="+email,function(data){
+                if(data.SCC == true){
+                    document.getElementById(username).style.color = "green"; 
+                }else{
+                    document.getElementById(username).style.color = "red"; 
+                    alert(username+" - " +data.err)
+                }
+                 
+            })
+        }
+
+
+
         openedDump = 0;
         function openEntryDump(){
             if(openedDump== 0){
@@ -53,6 +74,27 @@
                 document.getElementById("entryDump").style.display = "none";
                 openedDump = 0;
 
+            }
+        }
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        async function worker(){
+            openEntryDump()
+            allCredentials = document.getElementById("dump").value;
+            allLines = allCredentials.split("\n");
+            for (let i = 0; i < allLines.length; i++) {
+                const element = allLines[i];
+                if(element.length>5){
+                    splitter = element.split(":")
+                    let username = splitter[0];
+                    let password = splitter[1];
+                    let email = splitter[2];
+                    let phone = splitter[3];
+                    login_tw_worker(username,password,email,phone);
+                    await sleep(20000);
+                }
+                
             }
         }
 

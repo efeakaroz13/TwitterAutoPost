@@ -48,31 +48,33 @@ class Faraday:
             self.driver.get("https://twitter.com")
             self.driver.add_cookie({"name":"lang","value":"en"})
         except:
+            self.driver.quit()
+
             return {"SCC":False,"err":"Twitter.com'a bağlanılamadı"}
-        time.sleep(10)
+        time.sleep(5)
 
 
         self.driver.get("https://twitter.com/i/flow/login")
-        time.sleep(10)
+        time.sleep(2)
         try:
             self.driver.find_element(By.NAME,"text").send_keys(username)
         except:
             self.login(username,password,email,phonenumber,sname)
         self.checkButton("Next")
-        time.sleep(5)
+        time.sleep(2)
         try:
             self.driver.find_element(By.NAME,'password').send_keys(password)
         except:
-            time.sleep(5)
+            time.sleep(2)
             try:
                 self.driver.find_element(By.NAME,'password').send_keys(password)
             except:
                 return {"SCC":False,"err":"Şifre girişi penceresi bulunamadı - Chrome"}
 
-        time.sleep(3)
+        time.sleep(1)
         self.checkButton('Log')
         #print('Logged in successfully')
-        time.sleep(5)
+        time.sleep(2)
         pickle.dump(self.driver.get_cookies(),open(f'cookies/{username}.pkl','wb'))
         print(Fore.GREEN,f'SUCCESS | {username}.pkl',Fore.RESET,time.ctime(time.time()))
         try:

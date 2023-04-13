@@ -9,12 +9,13 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    f = int(open("f.txt","r").read())
     try:
         allPosts = json.loads(open("postInfo.json","r").read())
     except Exception as e:
 
         allPosts = None
-    return render_template('index.html',allPosts=allPosts)
+    return render_template('index.html',allPosts=allPosts,f=f)
 
 @app.route('/createPost',methods=['POST','GET'])
 def createPost():
@@ -80,5 +81,10 @@ def login_with_twitter():
     out = faraday.login(username,password,email,phonenumber,"s1")
     return out
 
+@app.route("/frequency")
+def setFrequency():
+    f = request.args.get("f")
+    open("f.txt","w").write(f)
+    return {"SCC":True}
 if __name__ == "__main__":
     app.run(debug=True,port=3000)
