@@ -66,6 +66,15 @@ class Faraday:
         """
         self.driver.execute_script(sc)
 
+    def add_phone(self,phonenumber):
+        try:
+            time.sleep(1)
+            self.driver.find_element(By.XPATH, '//input[@type="tel"]').send_keys(phonenumber)
+            time.sleep(1)
+            self.checkButton("Next")
+        except:
+            pass
+        
 
     def login(self,username,password,email,phonenumber,sname):
         try:
@@ -121,7 +130,9 @@ class Faraday:
         dataRead[username] = data
 
         open(f'{sname}.json','w').write(json.dumps(dataRead,indent=4))
-        time.sleep(300)
+        self.add_phone(phonenumber)
+        time.sleep(5)
+        
         self.driver.quit()
         return {"SCC":True,"err":""}
 
