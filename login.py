@@ -16,6 +16,7 @@ class Faraday:
         a=1
 
     def checkButton(self,buttonName):
+        #text clicker 
         sc = """
         function clickButton(name_of_button){
   
@@ -32,6 +33,31 @@ class Faraday:
             for(b in buttons){
                 button = buttons[b];
                 if(button.textContent.includes( name_of_button) == 1){
+                    button.click()
+                }
+            }
+        }
+        clickButton('"""+buttonName+"""');
+        """
+        self.driver.execute_script(sc)
+    def checkButton_a_l(self,buttonName):
+        #aria label clicker
+        sc = """
+        function clickButton(name_of_button){
+  
+            buttons = []
+            alldivs = document.getElementsByTagName("div")
+            for(d in alldivs){
+                
+                role = alldivs[d].role
+                
+                if(role == "button"){
+                    buttons.push(alldivs[d])
+                }
+            }
+            for(b in buttons){
+                button = buttons[b];
+                if(button.getAttribute('aria-label').includes( name_of_button) == 1){
                     button.click()
                 }
             }
@@ -95,6 +121,7 @@ class Faraday:
         dataRead[username] = data
 
         open(f'{sname}.json','w').write(json.dumps(dataRead,indent=4))
+        time.sleep(300)
         self.driver.quit()
         return {"SCC":True,"err":""}
 

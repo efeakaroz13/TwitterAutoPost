@@ -9,6 +9,7 @@ import random
 import os
 import re
 import string
+from colorama import Fore
 alphabet = list(string.ascii_lowercase)
 
 class PosterFaraday:
